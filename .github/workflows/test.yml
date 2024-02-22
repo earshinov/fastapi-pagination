@@ -40,7 +40,7 @@ jobs:
         run: |
           export DOCKER_ID=$(docker run -d scylladb/scylla:latest --cluster-name test )
           export CQL_TEST_HOST=$(docker inspect --format='{{ .NetworkSettings.IPAddress }}' ${DOCKER_ID})
-          while ! nc -z ${CQL_TEST_HOST} 9042; do   
+          while ! nc -z ${CQL_TEST_HOST} 9042; do
             sleep 0.1 # wait for 1/10 of the second before check again
           done
 
@@ -87,8 +87,3 @@ jobs:
         run: |
           poetry run pip install -U "gino[starlette]" "fastapi==0.84.0"
           poetry run pytest -m gino --cov-append --cov-report=xml
-
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
-        with:
-          file: ./coverage.xml
